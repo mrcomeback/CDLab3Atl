@@ -1,0 +1,80 @@
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(9D88FABC-95AC-4176-AE1F-97B0C87E4F31),
+	dual,
+	nonextensible,
+	pointer_default(unique)
+]
+interface IComplex : IDispatch {
+	[id(1)] HRESULT SetModule();
+	[id(2)] HRESULT ReadFromFile([in] BSTR filePath, [in] LONG lineNumber);
+	[id(3)] HRESULT SaveToFile([in] BSTR filePath);
+
+	[id(4), propget] HRESULT MyRealValue([out, retval] DOUBLE* pVal);
+	[id(4), propput] HRESULT MyRealValue([in] DOUBLE val);
+
+	[id(5), propget] HRESULT MyImagValue([out, retval] DOUBLE* pVal);
+	[id(5), propput] HRESULT MyImagValue([in] DOUBLE val);
+
+	[id(6), propget] HRESULT MyModule([out, retval] DOUBLE* pVal);
+};
+
+[
+	object,
+	uuid(EABE18C2-3A6F-437B-89A0-E3BE74B7BD9B),
+	dual,
+	nonextensible,
+	pointer_default(unique)
+]
+interface IRational : IDispatch {
+	[id(1)] HRESULT setSqrt([in, defaultvalue(0)] VARIANT_BOOL isNegative);
+	[id(2)] HRESULT setConjugate([in] IRational* rational);
+	[id(3)] HRESULT ReadFromFile([in] BSTR filePath, [in] LONG lineNumber);
+	[id(4)] HRESULT SaveToFile([in] BSTR filePath);
+	[propget, id(5)] HRESULT Sqrt([out, retval] DOUBLE* value);
+};
+
+[
+	object,
+	uuid(3B4781F4-571D-4E0A-B97B-FB22E0A7CE92),
+	dual,
+	nonextensible,
+	pointer_default(unique)
+]
+interface IPersistent : IDispatch {
+	[id(1)] HRESULT ReadFromFile([in] BSTR filePath, [in] LONG lineNumber);
+	[id(2)] HRESULT SaveToFile([in] BSTR filePath);
+};
+
+[
+	uuid(4D6C6F43-B499-4E5B-B778-28C10BB1CC01)
+]
+coclass ComplexNumber {
+	[default] interface IComplex;
+	interface IPersistent;
+};
+
+[
+	uuid(C25D4F47-0A4A-4B8C-859E-98E152B654F7)
+]
+coclass RationalNumber {
+	[default] interface IRational;
+	interface IPersistent;
+};
+
+[
+	uuid(7c0e13a2-8e17-4f32-95db-e395c7974484),
+	version(1.0)
+]
+library CDLab3AtlLib
+{
+	interface IComplex;
+	interface IRational;
+	interface IPersistent;
+
+	coclass ComplexNumber;
+	coclass RationalNumber;
+};
